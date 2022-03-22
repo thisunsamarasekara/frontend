@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import axios from 'axios';
+
+export default class App extends Component {
+   constructor(props){
+     super(props);
+
+     this.state={
+        foods:[]
+     };
+   }
+    
+   componentDidMount(){
+     this.retrievePosts();
+   }
+    
+   retrievePosts(){
+     axios.get("http://localhost:8000/foods").then(res =>{
+       if(res.data.success){
+         this.setState({
+           foods:res.data.existingPosts
+         });
+         console.log(this.state.foods)
+       }
+     })
+   }
+   
+  
+
+   
+
+  render() {
+    return (
+      <div>
+        {this.state.foods.map(foods =>(
+        <div>
+          <p>{foods.Foodname}</p>
+          <p>{foods.Itemprice}</p>
+          <p>{foods.Foodcategory}</p>
+          <p>{foods.Foodstatus}</p>
+        </div>
+        )
+          )}
+      </div>
+    )
+  }
 }
 
-export default App;
